@@ -1,2 +1,2 @@
 # PowerShell
-Random sampling of PowerShell scripts I've created to automate various tasks
+Random sampling of PowerShell scripts I've created to automate various tasks. I just don't like manual, repetitive tasks so these scripts are just a few samples of ways I've used my innovation (in my own opinion) to create scripts to perform various checks/validations and other manual tasks to perform work. These by today's AI standards would be considered "AI Agents" since these scripts can be triggered by some event or "watch" over things and/or be scheduled to "look" at things to then perform some routine of actions to complete work. My motto... I'll work my butt off to automate things and NOT do manual, repetitive work!
