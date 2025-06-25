@@ -22,13 +22,13 @@ $sessionStartTime = Get-Date
 
 Write-Host "1. Getting the date of the oldest folder..."
 $currTime = Get-Date
-Write-Host "     Started: " $currTime.ToString("HH:mm:ss tt")
+Write-Host "     Started: " $currTime.ToString("hh:mm:ss tt")
 
 # Get oldest folder's last access date/time
 $oldestFolderDate = (Get-ChildItem $path -Attributes Directory | Sort-Object -Property LastWriteTime | Select-Object -First 1).LastWriteTime
 
 $currTime = Get-Date
-Write-Host "   Completed: " $currTime.ToString("HH:mm:ss tt")
+Write-Host "   Completed: " $currTime.ToString("hh:mm:ss tt")
 Write-Host 
 Write-Host "*** Oldest Folder -> $oldestFolderDate <- ***"
 
@@ -39,20 +39,20 @@ $thresholdDate = $thresholdDate.AddDays(1)
 Write-Host 
 Write-Host "2. Getting count of files in the oldest folder to purge..."
 $currTime = Get-Date
-Write-Host "     Started: " $currTime.ToString("HH:mm:ss tt")
+Write-Host "     Started: " $currTime.ToString("hh:mm:ss tt")
 
 # 4. Get count of folders older than the $thresholdDate that will be deleted
 $itemCount = (Get-ChildItem $path -Attributes Directory | Where-Object { $_.LastWriteTime -le $thresholdDate } | Measure-Object).Count
 
 $currTime = Get-Date
-Write-Host "   Completed: " $currTime.ToString("HH:mm:ss tt")
+Write-Host "   Completed: " $currTime.ToString("hh:mm:ss tt")
 Write-Host 
 Write-Host "*** No. of files to purge -> $itemCount <- ***"
 Write-Host 
 
 Write-Host "3. The purge of the files has begun..."
 $currTime = Get-Date
-Write-Host "     Started: " $currTime.ToString("HH:mm:ss tt")
+Write-Host "     Started: " $currTime.ToString("hh:mm:ss tt")
 
 # 5. Perform deletion of folders older than thresholdDate
 #Get-ChildItem $path -Attributes Directory | Where-Object { $_.LastWriteTime -lt $thresholdDate } | Remove-Item -Recurse -Force
@@ -69,7 +69,7 @@ Get-ChildItem -Path $path -Recurse -Directory | Where-Object {
 }
 
 $sessionEndTime = Get-Date
-Write-Host "   Completed: " $sessionEndTime.ToString("HH:mm:ss tt")
+Write-Host "   Completed: " $sessionEndTime.ToString("hh:mm:ss tt")
 Write-Host 
 Write-Host "Alright we're one folder cleaner and free of!!!"
 Write-Host 
