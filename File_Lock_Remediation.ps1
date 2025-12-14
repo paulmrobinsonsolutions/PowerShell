@@ -29,7 +29,7 @@ $exceptionFolder = "B:\Some_Folder\Your_Verified_Exceptions_Folder"
 # 2. Pause N seconds to check if file has been moved, pause N seconds bofore next loop
 #    2a. If file cannot be processed/moved by ABBYY then move the "bad" file to backlog folder
 #    2b. If file has been processed/moved... log and continue on to next file
-Clear
+Clear-Host
 
 Write-Host
 $currentTime = Get-Date
@@ -68,9 +68,10 @@ while($fileCount -gt 0)
             #Get the oldest file from the Backlog folder and move back into process folder (folder to watch)
             #*NOTE: Ideally if this file still fails to be processed by the OCR tool, it's clearly
             #       a 'bad' file and should be moved to the 'Exceptions" folder.
-            $filePath = Get-ChildItem -Path $backlogFolder | Sort-Object LastWriteTime | Select-Object -First 1
+            $filePath = Get-ChildItem -File -Path $backlogFolder | Sort-Object LastWriteTime | Select-Object -First 1
         
             # Move the oldest file to the target folder
+            Write-Host "   File being moved... $($filePath.FullName)"
             Move-Item -Path $filePath.FullName -Destination $sourceFolder -Force
     
             # Get count of files remaining in source folder
@@ -87,6 +88,12 @@ while($fileCount -gt 0)
     }
     else
     {
+        # Move all zero-byte files to exception folder immediately
+        Get-ChildItem -Path $sourceFolder -File | Where-Object {$_.Length -eq 0} | ForEach-Object {
+            Write-Host "$(Get-Date) - Moving zero-byte file to Exceptions folder: $($_.FullName)"
+            Move-Item -Path $_.FullName -Destination $exceptionFolder -Force
+        }
+
         # Get the oldest file in the source folder
         $currentFile = Get-ChildItem -Path $sourceFolder | Sort-Object Name | Select-Object -First 1
 
@@ -98,9 +105,8 @@ while($fileCount -gt 0)
 
             # Re-check count of files remaining in source folder
             $fileCount = (Get-ChildItem $sourceFolder -File | Measure-Object).Count
-            Write-Host "$(Get-Date) - File count in source: " $fileCount
-
-            Write-Host "$(Get-Date) - Current file to check: $currentFile"
+            Write-Host "$((Get-Date).ToString("hh:mm:ss tt")) - File count in source: $($fileCount)"
+            Write-Host "$((Get-Date).ToString("hh:mm:ss tt")) - Current file to check: $($currentFile)"
         }
         
         # increment the counter
