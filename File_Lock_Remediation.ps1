@@ -1,6 +1,6 @@
 ﻿Set-PSDebug -Off
 #*********************************************
-# Purpose: This script will "watch" the OCR processing folder for files that get "stuck" trying to OCR. These "bad"
+# Purpose: This script will "watch" an OCR processing folder for files that get "stuck" trying to OCR. These "bad"
 #          files can be observed when the file count ticks up and down repeatedly very quickly. This indicates the
 #          OCR tool is attempting to process the file but fails which is typically due to the size of the file or
 #          simply a poor quality file that cannot be OCR'd by the OCR tool. Files that cannot get processed, will
@@ -89,10 +89,7 @@ while($fileCount -gt 0)
     else
     {
         # Move all zero-byte files to exception folder immediately
-        Get-ChildItem -Path $sourceFolder -File | Where-Object {$_.Length -eq 0} | ForEach-Object {
-            Write-Host "$(Get-Date) - Moving zero-byte file to Exceptions folder: $($_.FullName)"
-            Move-Item -Path $_.FullName -Destination $exceptionFolder -Force
-        }
+        Get-ChildItem -Path $sourceFolder -File | Where-Object {$_.Length -eq 0} | Move-Item -Path $_.FullName -Destination $exceptionFolder -Force
 
         # Get the oldest file in the source folder
         $currentFile = Get-ChildItem -Path $sourceFolder | Sort-Object Name | Select-Object -First 1
